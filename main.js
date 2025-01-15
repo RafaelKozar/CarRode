@@ -9,9 +9,12 @@ const car = new Car(road.getLaneCenter(0), 100, 30, 50);
 animate();
 
 function animate(){
-    myCanvas.height = window.innerHeight;
     car.update();
+    myCanvas.height = window.innerHeight;    
+    ctx.save();
+    ctx.translate(0, -car.y);    
     road.draw(ctx);
     car.draw(ctx);
+    ctx.restore();
     requestAnimationFrame(animate);
 }
