@@ -10,31 +10,45 @@ class Road{
         this.top=-infinity; 
         this.bottom=infinity;
         this.lineDashNumber = 20;
+
+        const topLeft = {x:this.left, y:this.top};
+        const topRight = {x:this.right, y:this.top};
+        const bottomLeft = {x:this.left, y:this.bottom};
+        const bottomRight = {x:this.right, y:this.bottom};
+        this.borders = [
+            [topLeft, bottomLeft],
+            [topRight, bottomRight]
+        ]
     }
 
     getLaneCenter(laneIndex){
         const laneWidth = this.width/this.laneCount;
-        return this.left+laneWidth/2+laneIndex*laneWidth;
+        const index = Math.min(laneIndex, this.laneCount-1);   
+
+        return this.left+laneWidth/2+index*laneWidth;
     }
 
     draw(ctx){
         ctx.lineWidth=5;
         ctx.strokeStyle="white";
 
-        for(let i=0; i <= this.laneCount; i++){
+        ctx.setLineDash([this.lineDashNumber, this.lineDashNumber]);
+        for(let i=1; i <= this.laneCount-1; i++){
             ctx.beginPath();
             const x = lerp(this.left, this.right, i/this.laneCount);
-
-            if(i>0 && i<this.laneCount){
-                ctx.setLineDash([this.lineDashNumber, this.lineDashNumber]);
-            }else{
-                ctx.setLineDash([]);
-            }
-
+            
             ctx.moveTo(x, this.top);
             ctx.lineTo(x, this.bottom);
             ctx.stroke();
         }
+
+        ctx.setLineDash([]);
+        this.borders.forEach(border => {
+            ctx.beginPath();
+            ctx.moveTo(border[0].x, border[0].y);
+            ctx.lineTo(border[1].x, border[1].y);
+            ctx.stroke();
+        })
     }
 }
 
