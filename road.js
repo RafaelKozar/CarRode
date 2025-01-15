@@ -12,6 +12,11 @@ class Road{
         this.lineDashNumber = 20;
     }
 
+    getLaneCenter(laneIndex){
+        const laneWidth = this.width/this.laneCount;
+        return this.left+laneWidth/2+laneIndex*laneWidth;
+    }
+
     draw(ctx){
         ctx.lineWidth=5;
         ctx.strokeStyle="white";
